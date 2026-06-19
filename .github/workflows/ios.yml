@@ -18,13 +18,11 @@ jobs:
         channel: 'stable'
         cache: true
 
-    - name: Generate iOS Platform Files (Safe Backup)
+    - name: Generate iOS Platform Files (Safe)
       run: |
-        mkdir -p temp_lib
-        cp -R lib/ temp_lib/
-        flutter create --platforms=ios --project-name=agro_uruglar_mobile .
-        rm -rf lib
-        mv temp_lib lib
+        flutter create --platforms=ios --project-name=agro_uruglar_mobile dummy_project
+        cp -R dummy_project/ios ios
+        rm -rf dummy_project
 
     - name: Get packages
       run: flutter pub get
