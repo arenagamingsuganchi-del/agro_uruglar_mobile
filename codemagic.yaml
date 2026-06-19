@@ -1,0 +1,32 @@
+# Codemagic configuration for Agro-Uruglar Flutter iOS Mobile App
+workflows:
+  flutter-ios:
+    name: Agro-Uruglar iOS Build
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      vars:
+        XCODE_WORKSPACE: "ios/Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+    scripts:
+      - name: Get dependencies
+        script: |
+          flutter packages pub get
+      - name: Build iOS App
+        script: |
+          # Build a release version of the iOS application. 
+          # Note: Real devices require Apple Developer Certificates for codesigning.
+          # If Apple credentials are not set up in Codemagic dashboard, this build
+          # will generate an unsigned .app/zip artifact which can be downloaded.
+          flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/*.app
+      - build/ios/iphoneos/*.zip
